@@ -629,7 +629,7 @@ def enviar_correo(destino, asunto, html):
             BASE_DIR,
             "static",
             "img",
-            "unicomfacauca.png"
+            "Unicomfacauca.png"
         )
 
         with open(ruta_uni, "rb") as f:
@@ -647,7 +647,7 @@ def enviar_correo(destino, asunto, html):
             uni.add_header(
                 "Content-Disposition",
                 "inline",
-                filename="unicomfacauca.png"
+                filename="Unicomfacauca.png"
             )
 
             parte_relacionada.attach(uni)
