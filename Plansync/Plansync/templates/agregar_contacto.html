@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block contenido %}
+
+<div class="edit-container">
+
+    <div class="edit-card">
+
+        <h1>Nuevo Contacto</h1>
+
+        <form method="POST" action="/crear_contacto">
+
+            <label>Nombre</label>
+
+            <input
+                type="text"
+                name="nombre"
+                required
+            >
+
+            <label>Correo</label>
+
+            <input
+                type="email"
+                name="email"
+                required
+            >
+
+            <label>Teléfono</label>
+
+            <input
+                type="text"
+                name="telefono"
+                required
+            >
+
+            <label>Dirección</label>
+
+            <input
+                type="text"
+                name="direccion"
+            >
+
+            <label>Notas</label>
+
+            <textarea
+                name="notas">
+            </textarea>
+
+            <div class="edit-buttons">
+
+                <a href="/contactos"
+                   class="btn-cancelar">
+
+                   Cancelar
+                </a>
+
+                <button
+                    type="submit"
+                    class="btn-guardar">
+
+                    Guardar
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

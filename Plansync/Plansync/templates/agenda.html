@@ -1,0 +1,872 @@
+{% extends "base.html" %}
+{% block contenido %}
+
+<div class="top-header">
+
+    <div>
+        <h1>Agenda</h1>
+        <p>Organiza tus reuniones y fechas importantes</p>
+    </div>
+
+    <!-- SOLO PROFESOR -->
+    {% if session["rol"] == "profesor" %}
+
+    <button class="btn-add" onclick="abrirModalReunion()">
+        + Nueva Reunión
+    </button>
+
+    {% endif %}
+
+</div>
+
+<div class="row mt-4">
+
+    <!-- =========================
+    CALENDARIO
+    ========================== -->
+
+    <div class="col-md-8">
+
+        <div class="card-box calendario-box">
+
+    <!-- HEADER CALENDARIO -->
+
+    <div class="calendar-header">
+
+        <h3>
+            {{ mes_actual }} {{ anio_actual }}
+        </h3>
+
+        <div class="calendar-arrows">
+
+    <!-- MES ANTERIOR -->
+
+    <a href="/agenda?mes={{ mes_anterior }}&anio={{ anio_anterior }}">
+
+        <i class="fas fa-chevron-left"></i>
+
+    </a>
+
+    <!-- MES SIGUIENTE -->
+
+    <a href="/agenda?mes={{ mes_siguiente }}&anio={{ anio_siguiente }}">
+
+        <i class="fas fa-chevron-right"></i>
+
+    </a>
+
+ </div>
+
+    </div>
+
+    <!-- DIAS SEMANA -->
+
+    <div class="dias-semana">
+
+        <span>Lun</span>
+        <span>Mar</span>
+        <span>Mié</span>
+        <span>Jue</span>
+        <span>Vie</span>
+        <span>Sáb</span>
+        <span>Dom</span>
+
+    </div>
+
+    <div class="calendar-simple">
+
+    {% for semana in calendario %}
+
+    {% for dia in semana %}
+
+        {% if dia == 0 %}
+
+            <div class="day-box empty-day"></div>
+
+        {% else %}
+
+            <div class="day-box">
+
+                <!-- NÚMERO DEL DÍA -->
+
+                <div class="numero-dia">
+
+                    {{ dia }}
+
+                </div>
+
+                <!-- REUNIONES DEL DÍA -->
+
+                {% for r in reuniones_calendario %}
+
+                    {% if r[3].day == dia %}
+
+                        <div class="evento-dia">
+
+                            <small>
+
+                                {{ r[4] }}
+
+                            </small>
+
+                            <p>
+
+                                {{ r[1] }}
+
+                            </p>
+
+                        </div>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+    {% endfor %}
+
+{% endfor %}
+
+</div>
+
+     </div>
+
+    </div>
+
+    <!-- =========================
+PANEL EVENTOS
+========================= -->
+
+<div class="col-md-4">
+
+    <!-- =========================
+    REUNIONES DEL MES
+    ========================== -->
+
+    <div class="card-box mb-4">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+
+            <h4>
+                📅 Reuniones del Mes
+            </h4>
+
+            <span class="badge bg-primary">
+
+                {{ reuniones|length }}
+
+            </span>
+
+        </div>
+
+        {% if reuniones %}
+
+            {% for r in reuniones %}
+
+            <div class="evento-card mb-3">
+
+                <!-- HEADER -->
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <span class="badge bg-primary">
+
+                        Reunión
+
+                    </span>
+
+                    <!-- ESTADO -->
+
+                    {% if r[6] == "aceptado" %}
+
+                        <span class="badge bg-success">
+
+                            Aceptada
+
+                        </span>
+
+                    {% elif r[6] == "rechazado" %}
+
+                        <span class="badge bg-danger">
+
+                            Rechazada
+
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge bg-warning text-dark">
+
+                            Pendiente
+
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+                <!-- TITULO -->
+
+                <h5 class="mt-3">
+
+                    {{ r[1] }}
+
+                </h5>
+
+                <!-- INFO -->
+
+                <p class="mb-1">
+
+                    📅 {{ r[3] }}
+
+                </p>
+
+                <p class="mb-1">
+
+                    🕒 {{ r[4] }}
+
+                </p>
+
+                <p class="mb-2">
+
+                    📍 {{ r[5] }}
+
+                </p>
+
+                <!-- PROFESOR -->
+
+                {% if session["rol"] == "profesor" %}
+
+                <div class="mt-3 d-flex gap-2">
+
+                    <!-- EDITAR -->
+
+                    <button
+                        class="btn btn-sm btn-primary"
+                        onclick="abrirEditarReunion(
+                            '{{ r[0] }}',
+                            '{{ r[1] }}',
+                            '{{ r[2] }}',
+                            '{{ r[3] }}',
+                            '{{ r[4] }}',
+                            '{{ r[5] }}'
+                        )"
+                    >
+
+                        ✏ Editar
+
+                    </button>
+
+                    <!-- ELIMINAR -->
+
+                    <a
+                        href="/eliminar_reunion/{{ r[0] }}"
+                        class="btn btn-sm btn-danger"
+                    >
+
+                        🗑 Eliminar
+
+                    </a>
+
+                </div>
+
+                {% endif %}
+
+                <!-- ESTUDIANTE -->
+
+                {% if session["rol"] == "estudiante" %}
+
+                    {% if r[6] == "pendiente" %}
+
+                    <div class="mt-3 d-flex gap-2">
+
+                        <button
+                            class="btn btn-success btn-sm"
+                            onclick="abrirRespuesta(
+                                '{{ r[0] }}',
+                                'aceptado',
+                                '{{ r[1] }}',
+                                '{{ r[3] }}',
+                                '{{ r[4] }}'
+                            )"
+                        >
+
+                            ✔ Aceptar
+
+                        </button>
+
+                        <button
+                            class="btn btn-danger btn-sm"
+                            onclick="abrirRespuesta(
+                                '{{ r[0] }}',
+                                'rechazado',
+                                '{{ r[1] }}',
+                                '{{ r[3] }}',
+                                '{{ r[4] }}'
+                            )"
+                        >
+
+                            ✖ Rechazar
+
+                        </button>
+
+                    </div>
+
+                    {% endif %}
+
+                {% endif %}
+
+            </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="text-center text-muted p-4">
+
+                No hay reuniones este mes
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+    <!-- =========================
+    TAREAS DEL MES
+    ========================== -->
+
+    <div class="card-box">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+
+            <h4>
+
+                📚 Tareas del Mes
+
+            </h4>
+
+            <span class="badge bg-success">
+
+                {{ tareas_mes|length }}
+
+            </span>
+
+        </div>
+
+        {% if tareas_mes %}
+
+            {% for t in tareas_mes %}
+
+            <div class="evento-card mb-3">
+
+                <span class="badge bg-success">
+
+                    Tarea
+
+                </span>
+
+                <h5 class="mt-3">
+
+                    {{ t[1] }}
+
+                </h5>
+
+                <p class="mb-1">
+
+                    📅 {{ t[3] }}
+
+                </p>
+
+                <p>
+
+                    📝 {{ t[2] }}
+
+                </p>
+
+            </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="text-center text-muted p-4">
+
+                No hay tareas este mes
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+<!-- ===================================
+MODAL NUEVA REUNIÓN
+=================================== -->
+
+{% if session["rol"] == "profesor" %}
+
+<div id="modalReunion" class="modal-overlay">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h2>Nueva Reunión</h2>
+
+            <span
+                class="close"
+                onclick="cerrarModalReunion()"
+            >
+                &times;
+            </span>
+
+        </div>
+
+        <!-- FORMULARIO -->
+
+        <form
+            method="POST"
+            action="/crear_reunion"
+        >
+
+            <!-- TITULO -->
+
+            <label>Título</label>
+
+            <input
+                type="text"
+                name="titulo"
+                placeholder="Ej: Reunión de seguimiento"
+                required
+            >
+
+            <!-- DESCRIPCIÓN -->
+
+            <label>Descripción</label>
+
+            <textarea
+                name="descripcion"
+                placeholder="Describe la reunión"
+            ></textarea>
+
+            <!-- FECHA -->
+
+            <label>Fecha</label>
+
+            <input
+                type="date"
+                name="fecha"
+                required
+            >
+
+            <!-- HORA -->
+
+            <label>Hora</label>
+
+
+
+            <input
+                type="time"
+                name="hora"
+                required
+            >
+
+            <!-- LUGAR -->
+
+<label>Lugar / Sala</label>
+
+<input type="text"
+       name="lugar"
+       placeholder="Ej: Sala virtual Zoom / Aula 305"
+       required>
+
+            <!-- PARTICIPANTES -->
+
+            <label>Participantes</label>
+
+            <select
+                name="participantes"
+                multiple
+                required
+            >
+
+                {% for c in contactos %}
+
+                <option value="{{ c[0] }}">
+                    {{ c[1] }}
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+            <small>
+                Mantén presionado Ctrl para seleccionar varios
+            </small>
+
+            <!-- BOTONES -->
+
+            <div class="modal-buttons">
+
+                <button
+                    type="button"
+                    class="btn-cancel"
+                    onclick="cerrarModalReunion()"
+                >
+                    Cancelar
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn-save"
+                >
+                    Crear Reunión
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+<!-- ===================================
+MODAL RESPUESTA
+=================================== -->
+
+<div id="modalRespuesta"
+     class="modal-overlay"
+     style="z-index:10000;">
+
+    <div class="modal-box" style="max-width:500px;">
+
+        <div class="modal-header">
+
+            <h3>
+                Responder a Reunión
+            </h3>
+
+            <span class="close"
+                  onclick="cerrarRespuesta()">
+
+                &times;
+
+            </span>
+
+        </div>
+
+        <!-- FORMULARIO -->
+
+        <form id="formRespuesta">
+
+            <div class="card-box">
+
+                <h5 id="tituloReunion"></h5>
+
+                <p id="fechaReunion"></p>
+
+            </div>
+
+            <!-- COMENTARIO -->
+
+            <label class="mt-3">
+                Comentario (opcional)
+            </label>
+
+            <textarea
+                id="comentarioRespuesta"
+                class="form-control"
+                placeholder="Agrega un comentario..."
+            ></textarea>
+
+            <!-- BOTONES -->
+
+            <div class="modal-buttons">
+
+                <button
+                    type="submit"
+                    class="btn btn-success"
+                >
+                    ✔ Aceptar
+                </button>
+
+                <button
+                    type="button"
+                    onclick="cerrarRespuesta()"
+                    class="btn btn-danger"
+                >
+                    ✖ Cancelar
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+
+/* ===================================
+MODAL NUEVA REUNION
+=================================== */
+
+function abrirModalReunion(){
+
+    document.getElementById(
+        "modalReunion"
+    ).style.display = "flex";
+}
+
+function cerrarModalReunion(){
+
+    document.getElementById(
+        "modalReunion"
+    ).style.display = "none";
+}
+
+/* ===================================
+MODAL RESPUESTA
+=================================== */
+
+let reunionActual = null;
+let estadoActual = null;
+
+function abrirRespuesta(
+    reunionId,
+    estado,
+    titulo,
+    fecha,
+    hora
+){
+
+    reunionActual = reunionId;
+    estadoActual = estado;
+
+    document.getElementById(
+        "modalRespuesta"
+    ).style.display = "flex";
+
+    document.getElementById(
+        "tituloReunion"
+    ).innerHTML = titulo;
+
+    document.getElementById(
+        "fechaReunion"
+    ).innerHTML = fecha + " - " + hora;
+}
+
+/* ===================================
+ENVIAR RESPUESTA
+=================================== */
+
+document.getElementById(
+    "formRespuesta"
+).onsubmit = function(e){
+
+    e.preventDefault();
+
+    let comentario = document.getElementById(
+        "comentarioRespuesta"
+    ).value;
+
+    window.location.href =
+        "/asistencia/" +
+        reunionActual +
+        "/" +
+        estadoActual +
+        "?comentario=" +
+        encodeURIComponent(comentario);
+};
+
+/* ===================================
+CERRAR MODAL
+=================================== */
+
+function cerrarRespuesta(){
+
+    document.getElementById(
+        "modalRespuesta"
+    ).style.display = "none";
+}
+
+/* ===================================
+CLICK AFUERA
+=================================== */
+
+window.onclick = function(event){
+
+    let modal1 = document.getElementById(
+        "modalReunion"
+    );
+
+    let modal2 = document.getElementById(
+        "modalRespuesta"
+    );
+
+    if(event.target == modal1){
+
+        modal1.style.display = "none";
+    }
+
+    if(event.target == modal2){
+
+        modal2.style.display = "none";
+    }
+}
+
+</script>
+
+<script>
+
+function abrirEditarReunion(
+    id,
+    titulo,
+    descripcion,
+    fecha,
+    hora,
+    lugar
+){
+
+    document.getElementById(
+        "modalEditarReunion"
+    ).style.display = "flex";
+
+    document.getElementById(
+        "editTitulo"
+    ).value = titulo;
+
+    document.getElementById(
+        "editDescripcion"
+    ).value = descripcion;
+
+    document.getElementById(
+        "editFecha"
+    ).value = fecha;
+
+    document.getElementById(
+        "editHora"
+    ).value = hora;
+
+    document.getElementById(
+        "editLugar"
+    ).value = lugar;
+
+    document.getElementById(
+        "formEditarReunion"
+    ).action =
+        "/editar_reunion/" + id;
+}
+
+function cerrarEditarReunion(){
+
+    document.getElementById(
+        "modalEditarReunion"
+    ).style.display = "none";
+}
+
+</script>
+<!-- ===================================
+MODAL EDITAR REUNIÓN
+=================================== -->
+
+<div id="modalEditarReunion" class="modal-overlay">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h2>Editar Reunión</h2>
+
+            <span
+                class="close"
+                onclick="cerrarEditarReunion()"
+            >
+                &times;
+            </span>
+
+        </div>
+
+        <form
+            id="formEditarReunion"
+            method="POST"
+        >
+
+            <label>Título</label>
+
+            <input
+                type="text"
+                name="titulo"
+                id="editTitulo"
+                required
+            >
+
+            <label>Descripción</label>
+
+            <textarea
+                name="descripcion"
+                id="editDescripcion"
+            ></textarea>
+
+            <label>Fecha</label>
+
+            <input
+                type="date"
+                name="fecha"
+                id="editFecha"
+                required
+            >
+
+            <label>Hora</label>
+
+            <input
+                type="time"
+                name="hora"
+                id="editHora"
+                required
+            >
+
+            <label>Lugar</label>
+
+            <input
+                type="text"
+                name="lugar"
+                id="editLugar"
+                required
+            >
+
+            <div class="modal-buttons">
+
+                <button
+                    type="button"
+                    class="btn-cancel"
+                    onclick="cerrarEditarReunion()"
+                >
+                    Cancelar
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn-save"
+                >
+                    Guardar Cambios
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+{% endblock %}

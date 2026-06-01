@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Registro</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- ICONOS -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+
+        body{
+            min-height:100vh;
+
+            display:flex;
+            justify-content:center;
+            align-items:center;
+
+            background:linear-gradient(135deg,#0f172a,#1e293b);
+
+            font-family:'Segoe UI',sans-serif;
+        }
+
+        .register-card{
+
+            width:100%;
+            max-width:480px;
+
+            background:white;
+
+            padding:40px;
+
+            border-radius:25px;
+
+            box-shadow:0 15px 40px rgba(0,0,0,.2);
+        }
+
+        .logo{
+
+            width:170px;
+        }
+
+        h2{
+
+            font-weight:700;
+            color:#0f172a;
+        }
+
+        .form-control,
+        .form-select{
+
+            border-radius:12px;
+            padding:12px;
+        }
+
+        .btn-register{
+
+            background:#0f172a;
+            border:none;
+
+            border-radius:12px;
+
+            padding:12px;
+
+            font-weight:600;
+        }
+
+        .btn-register:hover{
+
+            background:#1e293b;
+        }
+
+        .password-strength{
+
+            font-size:14px;
+            margin-top:8px;
+            font-weight:600;
+        }
+
+        .error{
+
+            color:red;
+            font-size:14px;
+            margin-top:5px;
+        }
+
+        .success{
+
+            color:green;
+        }
+
+        .warning{
+
+            color:orange;
+        }
+
+        .danger{
+
+            color:red;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="register-card">
+
+    <!-- LOGO -->
+    <div class="text-center mb-4">
+
+        <img src="{{ url_for('static', filename='img/logo.png') }}"
+             class="logo">
+
+    </div>
+
+    <h2 class="text-center mb-4">
+    Crear cuenta
+</h2>
+
+
+{% if error %}
+
+<div class="alert alert-danger">
+
+    {{ error }}
+
+</div>
+
+{% endif %}
+
+<form method="POST" action="/register" id="formRegistro">
+        <!-- NOMBRE -->
+        <div class="mb-3">
+
+            <label class="form-label">
+                Nombre
+            </label>
+
+            <input
+                type="text"
+                name="nombre"
+                id="nombre"
+                class="form-control"
+                placeholder="Ingrese su nombre"
+                required
+            >
+
+        </div>
+
+        <!-- EMAIL -->
+        <div class="mb-3">
+
+            <label class="form-label">
+                Correo electrónico
+            </label>
+
+            <input
+          type="email"
+          name="email"
+          id="email"
+          class="form-control"
+          placeholder="usuario@unicomfacauca.edu.co"
+
+          pattern=".+@unicomfacauca\.edu\.co"
+
+          title="Debe ingresar el correo institucional"
+
+          required
+          >
+
+        </div>
+
+        <!-- PASSWORD -->
+        <div class="mb-3">
+
+            <label class="form-label">
+                Contraseña
+            </label>
+
+            <input
+                type="password"
+                name="password"
+                id="password"
+                class="form-control"
+                placeholder="Ingrese una contraseña"
+                required
+            >
+
+            <!-- CALIDAD -->
+            <div id="passwordStrength"
+                 class="password-strength">
+            </div>
+
+            <!-- REGLAS -->
+            <small class="text-muted">
+
+                Debe contener:
+                mayúscula,
+                minúscula,
+                número,
+                signo y
+                sin espacios.
+
+            </small>
+
+        </div>
+
+        <!-- VALIDAR PASSWORD -->
+        <div class="mb-3">
+
+            <label class="form-label">
+                Confirmar contraseña
+            </label>
+
+            <input
+                type="password"
+                name="confirmPassword"
+                id="confirmPassword"
+                class="form-control"
+                placeholder="Repita la contraseña"
+                required
+            >
+
+            <div id="confirmMessage"
+                 class="error">
+            </div>
+
+        </div>
+
+        <!-- ROL -->
+        <div class="mb-4">
+
+            <label class="form-label">
+                Rol
+            </label>
+
+            <select
+                name="rol"
+                class="form-select"
+                required
+            >
+
+                <option value="">
+                    Seleccione un rol
+                </option>
+
+                <option value="profesor">
+                    Profesor
+                </option>
+
+                <option value="estudiante">
+                    Estudiante
+                </option>
+
+            </select>
+
+        </div>
+
+        <!-- MENSAJE ERROR -->
+        <div id="mensajeError"
+             class="error mb-3">
+        </div>
+
+        <!-- BOTÓN -->
+       <button type="submit" class="btn btn-dark w-100 btn-register">
+
+            <i class="fa-solid fa-user-plus"></i>
+
+            Registrarse
+
+        </button>
+
+    </form>
+
+    <p class="text-center mt-4">
+
+        ¿Ya tienes cuenta?
+
+        <a href="/login">
+            Inicia sesión
+        </a>
+
+    </p>
+
+</div>
+
+<script>
+
+const password = document.getElementById("password");
+
+const confirmPassword = document.getElementById("confirmPassword");
+
+const strength = document.getElementById("passwordStrength");
+
+const confirmMessage = document.getElementById("confirmMessage");
+
+const form = document.getElementById("formRegistro");
+
+const mensajeError = document.getElementById("mensajeError");
+
+
+// =========================
+// FUERZA CONTRASEÑA
+// =========================
+
+password.addEventListener("keyup", () => {
+
+    const value = password.value;
+
+    let calidad = "";
+
+    let clase = "";
+
+    // VALIDACIONES
+
+    const mayuscula = /[A-Z]/.test(value);
+
+    const minuscula = /[a-z]/.test(value);
+
+    const numero = /[0-9]/.test(value);
+
+    const signo = /[!@#$%^&*(),.?":{}|<>]/.test(value);
+
+    const espacio = /\s/.test(value);
+
+    // SI TIENE ESPACIOS
+    if(espacio){
+
+        calidad = "La contraseña no puede contener espacios";
+
+        clase = "danger";
+    }
+
+    else if(
+        mayuscula &&
+        minuscula &&
+        numero &&
+        signo &&
+        value.length >= 8
+    ){
+
+        calidad = "Contraseña segura";
+
+        clase = "success";
+    }
+
+    else if(
+        value.length >= 6
+    ){
+
+        calidad = "Contraseña media";
+
+        clase = "warning";
+    }
+
+    else{
+
+        calidad = "Contraseña débil";
+
+        clase = "danger";
+    }
+
+    strength.innerHTML = calidad;
+
+    strength.className =
+        "password-strength " + clase;
+
+});
+
+
+// =========================
+// VALIDAR CONFIRMACIÓN
+// =========================
+
+confirmPassword.addEventListener("keyup", () => {
+
+    if(confirmPassword.value !== password.value){
+
+    confirmMessage.innerHTML =
+        "Las contraseñas no coinciden";
+
+    confirmMessage.style.color = "red";
+
+}
+    else{
+
+        confirmMessage.innerHTML =
+            "Contraseña válida";
+
+        confirmMessage.style.color =
+            "green";
+    }
+
+});
+
+// =========================
+// VALIDAR FORMULARIO
+// =========================
+
+form.addEventListener("submit", (e) => {
+
+    mensajeError.innerHTML = "";
+
+    const nombre =
+        document.getElementById("nombre").value.trim();
+
+    const email =
+        document.getElementById("email").value.trim();
+
+    const pass =
+        password.value;
+
+    // =========================
+    // CAMPOS VACÍOS
+    // =========================
+
+    if(
+        nombre === "" ||
+        email === "" ||
+        pass === ""
+    ){
+
+        e.preventDefault();
+
+        mensajeError.innerHTML =
+            "Debe completar todos los campos";
+
+        return;
+    }
+
+    // =========================
+    // VALIDAR CORREO INSTITUCIONAL
+    // =========================
+
+    if(
+        !email.toLowerCase().endsWith(
+            "@unicomfacauca.edu.co"
+        )
+    ){
+
+        e.preventDefault();
+
+        mensajeError.innerHTML =
+            "Debe usar el correo institucional";
+
+        return;
+    }
+
+    // =========================
+    // ESPACIOS EN CONTRASEÑA
+    // =========================
+
+    if(/\s/.test(pass)){
+
+        e.preventDefault();
+
+        mensajeError.innerHTML =
+            "La contraseña no puede contener espacios";
+
+        return;
+    }
+
+    // =========================
+    // VALIDAR MAYÚSCULA
+    // =========================
+
+    if(!/[A-Z]/.test(pass)){
+
+        e.preventDefault();
+
+        mensajeError.innerHTML =
+            "Debe contener una mayúscula";
+
+        return;
+    }
+
+    // =========================
+    // VALIDAR MINÚSCULA
+    // =========================
+
+    if(!/[a-z]/.test(pass)){
+
+        e.preventDefault();
+
+        mensajeError.innerHTML =
+            "Debe contener una minúscula";
+
+        return;
+    }
+
+    // =========================
+    // VALIDAR NÚMERO
+    // =========================
+
+    if(!/[0-9]/.test(pass)){
+
+        e.preventDefault();
+
+        mensajeError.innerHTML =
+            "Debe contener un número";
+
+        return;
+    }
+
+    // =========================
+    // VALIDAR SÍMBOLO
+    // =========================
+
+    if(!/[!@#$%^&*(),.?":{}|<>]/.test(pass)){
+
+        e.preventDefault();
+
+        mensajeError.innerHTML =
+            "Debe contener un símbolo";
+
+        return;
+    }
+
+    // =========================
+    // VALIDAR LONGITUD
+    // =========================
+
+    if(pass.length < 8){
+
+        e.preventDefault();
+
+        mensajeError.innerHTML =
+            "Debe tener mínimo 8 caracteres";
+
+        return;
+    }
+
+    // =========================
+    // VALIDAR CONFIRMACIÓN
+    // =========================
+
+    if(password.value !== confirmPassword.value){
+
+        e.preventDefault();
+
+        mensajeError.innerHTML =
+            "Las contraseñas no coinciden";
+
+        return;
+    }
+
+});
+
+</script>
+
+</body>
+</html>

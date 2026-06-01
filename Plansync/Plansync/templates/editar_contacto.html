@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block contenido %}
+
+<div class="edit-container">
+
+    <div class="edit-card">
+
+        <h1>Editar Contacto</h1>
+
+        <form method="POST">
+
+            <label>Nombre</label>
+            <input
+                type="text"
+                name="nombre"
+                value="{{ contacto[1] }}"
+                required
+            >
+
+            <label>Teléfono</label>
+            <input
+                type="text"
+                name="telefono"
+                value="{{ contacto[2] }}"
+                required
+            >
+
+            <label>Correo</label>
+            <input
+                type="email"
+                name="email"
+                value="{{ contacto[3] }}"
+                required
+            >
+
+            <label>Dirección</label>
+            <input
+                type="text"
+                name="direccion"
+                value="{{ contacto[4] }}"
+            >
+
+            <label>Notas</label>
+            <textarea
+                name="notas"
+            >{{ contacto[5] }}</textarea>
+
+            <div class="edit-buttons">
+
+                <a href="/contactos" class="btn-cancelar">
+                    Cancelar
+                </a>
+
+                <button type="submit" class="btn-guardar">
+                    Guardar Cambios
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

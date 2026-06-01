@@ -1,0 +1,980 @@
+/* -------------------- RESET -------------------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* -------------------- BODY -------------------- */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f4f6f9;
+    display: flex;
+}
+
+/* -------------------- SIDEBAR -------------------- */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background: #0f172a;
+    color: white;
+    padding: 20px;
+    position: fixed;
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.sidebar a {
+    display: block;
+    padding: 12px;
+    margin: 8px 0;
+    color: #cbd5e1;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    background: #1e293b;
+    color: white;
+}
+
+/* -------------------- CONTENIDO -------------------- */
+.main {
+    margin-left: 250px;
+    padding: 30px;
+    width: 100%;
+}
+
+/* -------------------- TITULOS -------------------- */
+h1 {
+    margin-bottom: 20px;
+    color: #111827;
+}
+
+h2 {
+    margin: 15px 0;
+}
+
+/* -------------------- CARDS -------------------- */
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+/* -------------------- DASHBOARD CARDS -------------------- */
+.cards {
+    display: flex;
+    gap: 20px;
+}
+
+.cards .card {
+    flex: 1;
+    text-align: center;
+}
+
+.cards .card h3 {
+    font-size: 28px;
+    color: #2563eb;
+}
+
+/* -------------------- FORMULARIOS -------------------- */
+form {
+    margin-bottom: 20px;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    outline: none;
+    transition: 0.3s;
+}
+
+input:focus {
+    border-color: #2563eb;
+}
+
+/* -------------------- BOTONES -------------------- */
+button {
+    background: #2563eb;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #1d4ed8;
+}
+
+/* BOTONES COMO LINKS */
+.btn {
+    display: inline-block;
+    background: #2563eb;
+    color: white;
+    padding: 6px 12px;
+    margin-top: 10px;
+    border-radius: 6px;
+    text-decoration: none;
+}
+
+.btn:hover {
+    background: #1d4ed8;
+}
+
+.btn-danger {
+    display: inline-block;
+    background: #dc2626;
+    color: white;
+    padding: 6px 12px;
+    margin-top: 10px;
+    border-radius: 6px;
+    text-decoration: none;
+}
+
+.btn-danger:hover {
+    background: #b91c1c;
+}
+
+/* -------------------- LISTAS -------------------- */
+ul {
+    list-style: none;
+}
+
+li {
+    background: white;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 8px;
+}
+
+/* -------------------- ESTADOS -------------------- */
+.estado-pendiente {
+    color: #f59e0b;
+    font-weight: bold;
+}
+
+.estado-completada {
+    color: #16a34a;
+    font-weight: bold;
+}
+
+.estado-rechazada {
+    color: #dc2626;
+    font-weight: bold;
+}
+
+/* -------------------- TABLAS -------------------- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+table th {
+    background: #f1f5f9;
+}
+
+/* -------------------- RESPONSIVE -------------------- */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+    }
+
+    .main {
+        margin-left: 200px;
+    }
+
+    .cards {
+        flex-direction: column;
+    }
+}
+
+/* =========================
+CONTACTOS
+========================= */
+
+.top-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+}
+
+.top-header h1{
+    font-size:36px;
+    margin-bottom:5px;
+}
+
+.top-header p{
+    color:#777;
+}
+
+.btn-add{
+    background:#030326;
+    color:white;
+    border:none;
+    padding:14px 25px;
+    border-radius:12px;
+    font-size:16px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.btn-add:hover{
+    background:#11114d;
+}
+
+.search-input{
+    width:100%;
+    padding:18px;
+    border-radius:14px;
+    border:1px solid #ddd;
+    margin-bottom:30px;
+    font-size:16px;
+}
+
+.cards-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:25px;
+}
+
+.contact-card{
+    background:white;
+    border-radius:18px;
+    padding:30px;
+    border:1px solid #eee;
+    position:relative;
+    transition:0.3s;
+}
+
+.contact-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 10px 25px rgba(0,0,0,0.08);
+}
+
+.card-icons{
+    position:absolute;
+    top:20px;
+    right:20px;
+}
+
+.card-icons a{
+    text-decoration:none;
+    font-size:20px;
+}
+
+.avatar{
+    width:60px;
+    height:60px;
+    background:#030326;
+    color:white;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:24px;
+    margin-bottom:20px;
+}
+
+.contact-card h3{
+    font-size:28px;
+    margin-bottom:10px;
+}
+
+.rol-contacto{
+    color:#666;
+    margin-bottom:20px;
+}
+
+.line{
+    width:100%;
+    height:1px;
+    background:#eee;
+    margin:20px 0;
+}
+
+/* =========================
+MODAL
+========================= */
+
+.modal{
+    display:none;
+    position:fixed;
+    z-index:999;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.5);
+    justify-content:center;
+    align-items:center;
+}
+
+.modal-content{
+    background:white;
+    width:500px;
+    border-radius:20px;
+    padding:35px;
+    animation:modalShow 0.3s ease;
+}
+
+@keyframes modalShow{
+    from{
+        transform:translateY(-20px);
+        opacity:0;
+    }
+
+    to{
+        transform:translateY(0);
+        opacity:1;
+    }
+}
+
+.modal-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.modal-header h2{
+    font-size:34px;
+}
+
+.close{
+    font-size:35px;
+    cursor:pointer;
+}
+
+.modal-content form{
+    display:flex;
+    flex-direction:column;
+}
+
+.modal-content label{
+    margin-bottom:8px;
+    margin-top:15px;
+    font-weight:600;
+}
+
+.modal-content input,
+.modal-content textarea{
+    padding:16px;
+    border-radius:12px;
+    border:1px solid #ddd;
+    font-size:16px;
+}
+
+.modal-content textarea{
+    height:100px;
+    resize:none;
+}
+
+.modal-buttons{
+    display:flex;
+    gap:15px;
+    margin-top:30px;
+}
+
+.btn-cancel{
+    flex:1;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    background:#eee;
+    cursor:pointer;
+    font-size:16px;
+}
+
+.btn-save{
+    flex:1;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    background:#030326;
+    color:white;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:600;
+}
+
+/* =========================
+EDITAR CONTACTO
+========================= */
+
+.edit-container{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:80vh;
+}
+
+.edit-card{
+    background:white;
+    width:600px;
+    padding:40px;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.08);
+}
+
+.edit-card h1{
+    margin-bottom:30px;
+    font-size:35px;
+}
+
+.edit-card form{
+    display:flex;
+    flex-direction:column;
+}
+
+.edit-card label{
+    margin-top:15px;
+    margin-bottom:8px;
+    font-weight:600;
+}
+
+.edit-card input,
+.edit-card textarea{
+    padding:15px;
+    border-radius:12px;
+    border:1px solid #ddd;
+    font-size:16px;
+}
+
+.edit-card textarea{
+    height:120px;
+    resize:none;
+}
+
+.edit-buttons{
+    display:flex;
+    gap:15px;
+    margin-top:30px;
+}
+
+
+
+.btn-guardar{
+    flex:1;
+    border:none;
+    background:#030326;
+    color:white;
+    padding:15px;
+    border-radius:12px;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+}
+
+/* =========================
+BOTONES CARD
+========================= */
+
+.acciones-card{
+    position:absolute;
+    top:20px;
+    right:20px;
+    display:flex;
+    gap:10px;
+}
+
+.btn-edit,
+.btn-delete{
+    text-decoration:none;
+    font-size:20px;
+}
+
+/* ICONOS EDITAR Y ELIMINAR */
+
+.acciones{
+    display:flex;
+    gap:20px;
+    margin-top:15px;
+}
+
+.icono{
+    font-size:24px;
+    transition:0.3s;
+    text-decoration:none;
+}
+
+/* EDITAR */
+.editar{
+    color:#4f46e5;
+}
+
+.editar:hover{
+    color:#312e81;
+    transform:scale(1.2);
+}
+
+/* ELIMINAR */
+.eliminar{
+    color:#ef4444;
+}
+
+.eliminar:hover{
+    color:#b91c1c;
+    transform:scale(1.2);
+}
+
+
+.modal-box{
+
+    width: 420px;
+
+    max-width: 90%;
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    background: white;
+
+    border-radius: 18px;
+
+    padding: 28px;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+
+    animation: aparecer .2s ease;
+}
+
+.modal-header h3{
+
+    font-size:28px;
+    margin-bottom:15px;
+}
+
+.modal-body p{
+
+    font-size:17px;
+    color:#444;
+
+    line-height:1.5;
+}
+
+.modal-footer{
+
+    margin-top:25px;
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:12px;
+}
+
+.btn-cancelar{
+
+    background:#e5e7eb;
+
+    border:none;
+
+    padding:12px 18px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-weight:600;
+}
+
+.btn-eliminar{
+
+    background:#ef4444;
+
+    color:white;
+
+    padding:12px 18px;
+
+    border-radius:10px;
+
+    text-decoration:none;
+
+    font-weight:600;
+}
+
+.btn-eliminar:hover{
+
+    background:#dc2626;
+}
+
+@keyframes aparecer{
+
+    from{
+        transform:scale(.8);
+        opacity:0;
+    }
+
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+}
+
+
+/* =========================
+AGENDA
+========================= */
+
+.modal-overlay{
+    display:none; /* IMPORTANTE */
+
+    position:fixed;
+    top:0;
+    left:0;
+
+    width:100%;
+    height:100%;
+
+    background:rgba(0,0,0,.5);
+
+    justify-content:center;
+    align-items:center;
+
+    z-index:999;
+}
+
+
+/* =========================
+CALENDARIO GOOGLE STYLE
+========================= */
+
+.calendario-box{
+
+    background:white;
+    border-radius:20px;
+    padding:25px;
+
+    box-shadow:0 5px 20px rgba(0,0,0,.05);
+}
+
+#calendar{
+    width:100%;
+    min-height:700px;
+}
+
+/* HEADER */
+
+.fc-toolbar-title{
+
+    font-size:22px !important;
+    font-weight:600;
+    color:#111827;
+}
+
+/* BOTONES */
+
+.fc-button{
+
+    background:#0f172a !important;
+    border:none !important;
+
+    border-radius:10px !important;
+
+    padding:8px 14px !important;
+}
+
+.fc-button:hover{
+
+    background:#1e293b !important;
+}
+
+/* DIAS */
+
+.fc-daygrid-day{
+
+    transition:.2s;
+}
+
+.fc-daygrid-day:hover{
+
+    background:#f8fafc;
+}
+
+/* EVENTOS */
+
+.fc-event{
+
+    border:none !important;
+
+    border-radius:8px !important;
+
+    padding:2px 5px !important;
+
+    font-size:11px !important;
+
+    font-weight:500;
+}
+
+/* HOY */
+
+.fc-day-today{
+
+    background:#eef2ff !important;
+}
+
+/* NUMEROS DIAS */
+
+.fc-daygrid-day-number{
+
+    color:#111827;
+    font-weight:500;
+    font-size:14px;
+}
+/* EVENTOS LATERALES */
+
+.evento-card{
+
+    background:#f8fafc;
+    border-radius:14px;
+    padding:18px;
+    margin-top:15px;
+    border:1px solid #eee;
+}
+
+.close{
+    cursor:pointer;
+    font-size:24px;
+}
+
+ 
+
+.dashboard-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:25px;
+}
+
+.titulo-dashboard{
+    font-size:32px;
+    font-weight:700;
+}
+
+.sub-dashboard{
+    color:#777;
+}
+
+.cards-dashboard{
+    display:flex;
+    gap:20px;
+    margin-top:30px;
+}
+
+.card-dashboard{
+    background:white;
+    padding:25px;
+    border-radius:14px;
+    width:250px;
+    box-shadow:0 2px 10px rgba(0,0,0,.06);
+}
+
+.card-dashboard h2{
+    margin-top:15px;
+    font-size:35px;
+}
+
+.card-dashboard p{
+    color:#666;
+}
+
+.icono{
+    width:55px;
+    height:55px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+}
+
+.azul{
+    background:#dbeafe;
+    color:#2563eb;
+}
+
+.verde{
+    background:#dcfce7;
+    color:#16a34a;
+}
+
+.morado{
+    background:#f3e8ff;
+    color:#9333ea;
+}
+
+.panel-reuniones{
+    width:320px;
+    background:white;
+    padding:20px;
+    border-radius:14px;
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+
+.panel-header{
+    display:flex;
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.panel-header p{
+    margin:0;
+    color:#777;
+    font-size:14px;
+}
+
+.icon-bell{
+    width:40px;
+    height:40px;
+    border-radius:10px;
+    background:#eef2ff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.mini-reunion{
+    background:#f3f4f6;
+    padding:15px;
+    border-radius:10px;
+    margin-bottom:15px;
+}
+
+.mini-info{
+    color:#777;
+    font-size:13px;
+    margin-top:8px;
+}
+
+.badge-pendiente{
+    background:#fef3c7;
+    color:#b45309;
+    padding:5px 10px;
+    border-radius:8px;
+    font-size:12px;
+    display:inline-block;
+    margin-top:10px;
+}
+
+.actividad-box{
+    background:white;
+    margin-top:35px;
+    padding:30px;
+    border-radius:14px;
+    box-shadow:0 2px 10px rgba(0,0,0,.06);
+}
+
+.actividad-item{
+    display:flex;
+    gap:15px;
+    padding:18px 0;
+    border-bottom:1px solid #eee;
+}
+
+.actividad-punto{
+    width:10px;
+    height:10px;
+    background:black;
+    border-radius:50%;
+    margin-top:7px;
+}
+
+.actividad-tiempo{
+    color:#777;
+    font-size:14px;
+    margin-top:5px;
+}
+
+
+/* =========================
+USUARIO SIDEBAR
+========================= */
+
+.sidebar-user{
+
+    text-align:center;
+    margin-top:15px;
+    margin-bottom:25px;
+}
+
+.usuario-nombre{
+
+    color:#111827 !important;
+    font-size:19px;
+    font-weight:700;
+    margin-bottom:4px;
+}
+
+.usuario-rol{
+
+    color:#374151 !important;
+    font-size:14px;
+    font-weight:500;
+    text-transform:capitalize;
+    margin:0;
+}
+
+/* =========================
+BOTONES CONTACTOS
+========================= */
+
+.btn-edit,
+.btn-delete{
+
+    background:transparent !important;
+
+    border:none;
+
+    box-shadow:none;
+
+    color:#374151;
+
+    transition:0.3s;
+}
+
+/* HOVER */
+
+.btn-edit:hover{
+
+    color:#2563eb;
+
+    transform:scale(1.1);
+}
+
+.btn-delete:hover{
+
+    color:#dc2626;
+
+    transform:scale(1.1);
+}
+
+.contact-card{
+
+    overflow:hidden;
+}
+
+.contact-card h3{
+
+    word-break:break-word;
+}

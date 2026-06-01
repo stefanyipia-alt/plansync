@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% block contenido %}
+
+<!-- HEADER -->
+
+<div class="dashboard-top">
+
+    <div>
+
+        <h3 class="titulo-dashboard">
+            Bienvenido de nuevo
+        </h3>
+
+        <p class="sub-dashboard">
+            Aquí está un resumen de tu actividad académica
+        </p>
+
+    </div>
+
+    <!-- PANEL REUNIONES -->
+
+    <div class="panel-reuniones">
+
+        <div class="panel-header">
+
+            <div class="icon-bell">
+                🔔
+            </div>
+
+            <div>
+
+                <strong>
+                    Reuniones Próximas
+                </strong>
+
+                <p>
+                    Tienes {{ total_agenda }} reuniones próximas
+                </p>
+
+            </div>
+
+        </div>
+
+        
+
+    </div>
+
+</div>
+
+<!-- TARJETAS -->
+
+<div class="cards-dashboard">
+
+    <!-- TAREAS PENDIENTES -->
+
+    <div class="card-dashboard">
+
+        <div class="icono azul">
+            ✔
+        </div>
+
+        <h2>
+            {{ tareas_pendientes }}
+        </h2>
+
+        <p>
+            Tareas Pendientes
+        </p>
+
+    </div>
+
+    <!-- COMPLETADAS -->
+
+    <div class="card-dashboard">
+
+        <div class="icono verde">
+            ✓
+        </div>
+
+        <h2>
+            {{ tareas_completadas }}
+        </h2>
+
+        <p>
+            Tareas Completadas
+        </p>
+
+    </div>
+
+    <!-- REUNIONES -->
+
+    <div class="card-dashboard">
+
+        <div class="icono morado">
+            📅
+        </div>
+
+        <h2>
+            {{ total_agenda }}
+        </h2>
+
+        <p>
+            Próximas Reuniones
+        </p>
+
+    </div>
+
+</div>
+
+<!-- ACTIVIDAD -->
+
+<div class="actividad-box">
+
+    <h4>
+        Actividad Reciente
+    </h4>
+
+    {% if actividad %}
+
+        {% for a in actividad %}
+
+        <div class="actividad-item">
+
+            <div class="actividad-punto"></div>
+
+            <div>
+
+                <strong>
+                    {{ a[0] }}
+                </strong>
+
+                <p class="actividad-tiempo">
+                    {{ a[1] }}
+                </p>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p>
+            No hay actividad reciente
+        </p>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

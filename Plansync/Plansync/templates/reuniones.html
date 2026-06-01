@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+
+<h1>Gestión de Reuniones</h1>
+
+<!-- SOLO PROFESOR CREA -->
+{% if rol == "profesor" %}
+<div class="card">
+    <h3>Nueva Reunión</h3>
+
+    <form method="POST" action="/crear_reunion">
+        <input name="titulo" placeholder="Título" required>
+        <input name="descripcion" placeholder="Descripción" required>
+        <input name="fecha" type="date" required>
+
+        <button type="submit">Crear reunión</button>
+    </form>
+</div>
+{% endif %}
+
+<hr>
+
+<h2>Lista de Reuniones</h2>
+
+{% for r in reuniones %}
+<div class="card">
+
+    <h3>{{ r[1] }}</h3>
+    <p>{{ r[2] }}</p>
+    <p><b>Fecha:</b> {{ r[3] }}</p>
+
+    <!-- ESTADO -->
+    <p>
+        <b>Estado:</b> 
+        {% if r[4] == "pendiente" %}
+            <span style="color: orange;">Pendiente</span>
+        {% elif r[4] == "aceptada" %}
+            <span style="color: green;">Aceptada</span>
+        {% elif r[4] == "rechazada" %}
+            <span style="color: red;">Rechazada</span>
+        {% endif %}
+    </p>
+
+    <!-- BOTONES -->
+    <div>
+
+        <!-- SOLO ESTUDIANTE RESPONDE -->
+        {% if rol == "estudiante" and r[4] == "pendiente" %}
+            <a href="/asistencia/{{ r[0] }}/aceptada" class="btn">Aceptar</a>
+            <a href="/asistencia/{{ r[0] }}/rechazada" class="btn-danger">Rechazar</a>
+        {% endif %}
+
+        <!-- SOLO PROFESOR GESTIONA -->
+        {% if rol == "profesor" %}
+            <a href="/cambiar_estado/{{ r[0] }}/aceptada" class="btn">Marcar aceptada</a>
+            <a href="/cambiar_estado/{{ r[0] }}/rechazada" class="btn-danger">Marcar rechazada</a>
+        {% endif %}
+
+    </div>
+
+</div>
+{% endfor %}
+
+{% endblock %}
