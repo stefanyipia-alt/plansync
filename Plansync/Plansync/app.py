@@ -652,9 +652,16 @@ def enviar_correo(destino, asunto, html):
 
             parte_relacionada.attach(uni)
 
+
         # =========================
         # SMTP GMAIL
         # =========================
+
+        print("================================")
+        print("DESTINO:", destino)
+        print("ASUNTO:", asunto)
+        print("EMAIL CONFIGURADO:", EMAIL)
+        print("================================")
 
         servidor = smtplib.SMTP(
             "smtp.gmail.com",
@@ -667,6 +674,7 @@ def enviar_correo(destino, asunto, html):
             EMAIL,
             PASSWORD
         )
+        print("LOGIN GMAIL OK")
 
         servidor.sendmail(
             EMAIL,
@@ -2125,6 +2133,8 @@ def reuniones():
 @app.route("/crear_reunion", methods=["POST"])
 def crear_reunion():
 
+
+
     # =========================
     # VALIDAR SESIÓN
     # =========================
@@ -2252,9 +2262,11 @@ def crear_reunion():
             # =========================
             # ENVIAR CORREO
             # =========================
+            print("ENVIANDO A:", estudiante[0])
 
             if estudiante:
 
+                print("ENVIANDO A:", estudiante[0])
                 asunto = "Nueva reunión programada"
 
                 html = correo_nueva_reunion(
