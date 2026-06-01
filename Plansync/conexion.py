@@ -1,23 +1,16 @@
+import os
 import mysql.connector
 
 def conectar():
+
     conexion = mysql.connector.connect(
-        host="localhost",
-        port=3306,
+
+        host=os.getenv("MYSQLHOST"),
+        port=int(os.getenv("MYSQLPORT", 49847)),
         user="root",
-        password="Sw@07092005",
-        database="plansync"
+        password=os.getenv("MYSQLPASSWORD"),
+        database=os.getenv("MYSQLDATABASE")
+
     )
 
     return conexion
-
-
-# Probar conexión
-if __name__ == "__main__":
-    try:
-        conn = conectar()
-        print("Conexión exitosa a MySQL")
-        conn.close()
-
-    except Exception as e:
-        print("Error:", e)

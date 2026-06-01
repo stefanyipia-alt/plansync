@@ -109,12 +109,12 @@ def get_db():
     try:
 
         conexion = mysql.connector.connect(
-            host='localhost',
-            user='root',
-            port=3306,
-            password='Sw@07092005',
-            database='plansync',
-            autocommit=False
+
+            host="zephyr.proxy.rlwy.net",
+            port=49847,
+            user="root",
+            password="tJOsKMkhwElcZTZqlPdfkOXumWMibnco",
+            database="railway"
 
         )
 
@@ -127,7 +127,6 @@ def get_db():
         print("ERROR MYSQL:", e)
 
         return None
-    
 
 
 @app.route("/")
