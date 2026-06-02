@@ -624,6 +624,7 @@ def enviar_correo(destino, asunto, html):
         # =========================
         # LOGO UNIVERSIDAD
         # =========================
+        print("BASE_DIR =", BASE_DIR)
 
         ruta_uni = os.path.join(
             BASE_DIR,
@@ -631,6 +632,9 @@ def enviar_correo(destino, asunto, html):
             "img",
             "Unicomfacauca.png"
         )
+
+        print("BUSCANDO:", ruta_uni)
+        print("EXISTE:", os.path.exists(ruta_uni))
 
         with open(ruta_uni, "rb") as f:
 
