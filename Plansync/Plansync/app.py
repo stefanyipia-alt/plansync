@@ -668,8 +668,9 @@ def enviar_correo(destino, asunto, html):
         print("================================")
 
         servidor = smtplib.SMTP(
-            "smtp.gmail.com",
-            587
+        "smtp.gmail.com",
+        587,
+        timeout=10
         )
 
         servidor.starttls()
@@ -2283,13 +2284,17 @@ def crear_reunion():
 
                 )
 
-                enviar_correo(
+                try:
 
-                    estudiante[0],
-                    asunto,
-                    html
+                 enviar_correo(
+                 estudiante[0],
+                 asunto,
+                 html
+                 )
 
-                )
+                except Exception as e:
+
+                 print("ERROR EMAIL:", e)
 
     # =========================
     # GUARDAR CAMBIOS
