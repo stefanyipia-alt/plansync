@@ -41,6 +41,8 @@ from itsdangerous import URLSafeTimedSerializer
 from werkzeug.security import generate_password_hash
 import re
 from itsdangerous import URLSafeTimedSerializer
+import requests
+
 
 #FLASK
 
@@ -97,10 +99,8 @@ def archivo_grande(e):
 # =========================
 # CORREO
 # =========================
-
-EMAIL = "stefanyipia@unicomfacauca.edu.co"
-
-PASSWORD = "lmzx ijiw fgtq noia"
+EMAIL = os.getenv("BREVO_EMAIL")
+PASSWORD = os.getenv("BREVO_API_KEY")
 
 #ruta descargar archivo
 
@@ -549,170 +549,62 @@ from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 
 
+
 # =========================
 # ENVIAR CORREO
 # =========================
+
 
 def enviar_correo(destino, asunto, html):
 
     try:
 
-        # =========================
-        # MENSAJE PRINCIPAL
-        # =========================
-
-        mensaje = MIMEMultipart()
-
-        mensaje["Subject"] = asunto
-        mensaje["From"] = EMAIL
-        mensaje["To"] = destino
-
-        # =========================
-        # PARTE RELACIONADA
-        # =========================
-
-        parte_relacionada = MIMEMultipart("related")
-
-        mensaje.attach(parte_relacionada)
-
-        # =========================
-        # HTML
-        # =========================
-
-        cuerpo = MIMEText(html, "html")
-
-        parte_relacionada.attach(cuerpo)
-
-        # =========================
-        # RUTA BASE
-        # =========================
-
-        BASE_DIR = os.path.dirname(
-            os.path.abspath(__file__)
+        api_key = os.environ.get(
+            "BREVO_API_KEY"
         )
 
-        print("BASE_DIR =", BASE_DIR)
+        headers = {
+            "accept": "application/json",
+            "api-key": api_key,
+            "content-type": "application/json"
+        }
 
-        # =========================
-        # LOGO PLANSYNC
-        # =========================
-
-        ruta_logo = os.path.join(
-            BASE_DIR,
-            "static",
-            "img",
-            "logo.png"
-        )
-
-        print("BUSCANDO LOGO:", ruta_logo)
-        print("EXISTE:", os.path.exists(ruta_logo))
-
-        if os.path.exists(ruta_logo):
-
-            with open(ruta_logo, "rb") as f:
-
-                logo = MIMEImage(
-                    f.read(),
-                    _subtype="png"
-                )
-
-                logo.add_header(
-                    "Content-ID",
-                    "<logo_plansync>"
-                )
-
-                logo.add_header(
-                    "Content-Disposition",
-                    "inline",
-                    filename="logo.png"
-                )
-
-                parte_relacionada.attach(logo)
-
-        else:
-
-            print("LOGO PLANSYNC NO ENCONTRADO")
-
-        # =========================
-        # LOGO UNIVERSIDAD
-        # =========================
-
-        ruta_uni = os.path.join(
-            BASE_DIR,
-            "static",
-            "img",
-            "Unicomfacauca.png"
-        )
-
-        print("BUSCANDO UNIVERSIDAD:", ruta_uni)
-        print("EXISTE:", os.path.exists(ruta_uni))
-
-        if os.path.exists(ruta_uni):
-
-            with open(ruta_uni, "rb") as f:
-
-                uni = MIMEImage(
-                    f.read(),
-                    _subtype="png"
-                )
-
-                uni.add_header(
-                    "Content-ID",
-                    "<logo_uni>"
-                )
-
-                uni.add_header(
-                    "Content-Disposition",
-                    "inline",
-                    filename="Unicomfacauca.png"
-                )
-
-                parte_relacionada.attach(uni)
-
-        else:
-
-            print("LOGO UNIVERSIDAD NO ENCONTRADO")
-
-        # =========================
-        # SMTP GMAIL
-        # =========================
+        data = {
+        "sender": {
+        "name": "PlanSync",
+        "email": "ipiawalterstefany@gmail.com"
+        
+            },
+            "to": [
+                {
+                    "email": destino
+                }
+            ],
+            "subject": asunto,
+            "htmlContent": html
+        }
 
         print("================================")
         print("DESTINO:", destino)
         print("ASUNTO:", asunto)
-        print("EMAIL CONFIGURADO:", EMAIL)
+        print("EMAIL:", EMAIL)
+        print("API_KEY:", "OK" if PASSWORD else "NO")
         print("================================")
 
-        servidor = smtplib.SMTP(
-            "smtp.gmail.com",
-            587,
-            timeout=20
+        respuesta = requests.post(
+        "https://api.brevo.com/v3/smtp/email",
+        headers=headers,
+        json=data
         )
 
-        servidor.starttls()
+        print("STATUS:", respuesta.status_code)
+        print("RESPUESTA:", respuesta.text)
 
-        servidor.login(
-            EMAIL,
-            PASSWORD
-        )
-
-        print("LOGIN GMAIL OK")
-
-        servidor.sendmail(
-            EMAIL,
-            destino,
-            mensaje.as_string()
-        )
-
-        servidor.quit()
-
-        print("CORREO ENVIADO")
-
-        return True
+        return respuesta.status_code == 201
 
     except Exception as e:
 
-        print("ERROR CORREO:", str(e))
+        print("ERROR BREVO:", e)
 
         return False
     # =========================
