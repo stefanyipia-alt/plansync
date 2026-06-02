@@ -548,6 +548,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 
+
 # =========================
 # ENVIAR CORREO
 # =========================
@@ -590,6 +591,8 @@ def enviar_correo(destino, asunto, html):
             os.path.abspath(__file__)
         )
 
+        print("BASE_DIR =", BASE_DIR)
+
         # =========================
         # LOGO PLANSYNC
         # =========================
@@ -601,30 +604,38 @@ def enviar_correo(destino, asunto, html):
             "logo.png"
         )
 
-        with open(ruta_logo, "rb") as f:
+        print("BUSCANDO LOGO:", ruta_logo)
+        print("EXISTE:", os.path.exists(ruta_logo))
 
-            logo = MIMEImage(
-                f.read(),
-                _subtype="png"
-            )
+        if os.path.exists(ruta_logo):
 
-            logo.add_header(
-                "Content-ID",
-                "<logo_plansync>"
-            )
+            with open(ruta_logo, "rb") as f:
 
-            logo.add_header(
-                "Content-Disposition",
-                "inline",
-                filename="logo.png"
-            )
+                logo = MIMEImage(
+                    f.read(),
+                    _subtype="png"
+                )
 
-            parte_relacionada.attach(logo)
+                logo.add_header(
+                    "Content-ID",
+                    "<logo_plansync>"
+                )
+
+                logo.add_header(
+                    "Content-Disposition",
+                    "inline",
+                    filename="logo.png"
+                )
+
+                parte_relacionada.attach(logo)
+
+        else:
+
+            print("LOGO PLANSYNC NO ENCONTRADO")
 
         # =========================
         # LOGO UNIVERSIDAD
         # =========================
-        print("BASE_DIR =", BASE_DIR)
 
         ruta_uni = os.path.join(
             BASE_DIR,
@@ -633,29 +644,34 @@ def enviar_correo(destino, asunto, html):
             "Unicomfacauca.png"
         )
 
-        print("BUSCANDO:", ruta_uni)
+        print("BUSCANDO UNIVERSIDAD:", ruta_uni)
         print("EXISTE:", os.path.exists(ruta_uni))
 
-        with open(ruta_uni, "rb") as f:
+        if os.path.exists(ruta_uni):
 
-            uni = MIMEImage(
-                f.read(),
-                _subtype="png"
-            )
+            with open(ruta_uni, "rb") as f:
 
-            uni.add_header(
-                "Content-ID",
-                "<logo_uni>"
-            )
+                uni = MIMEImage(
+                    f.read(),
+                    _subtype="png"
+                )
 
-            uni.add_header(
-                "Content-Disposition",
-                "inline",
-                filename="Unicomfacauca.png"
-            )
+                uni.add_header(
+                    "Content-ID",
+                    "<logo_uni>"
+                )
 
-            parte_relacionada.attach(uni)
+                uni.add_header(
+                    "Content-Disposition",
+                    "inline",
+                    filename="Unicomfacauca.png"
+                )
 
+                parte_relacionada.attach(uni)
+
+        else:
+
+            print("LOGO UNIVERSIDAD NO ENCONTRADO")
 
         # =========================
         # SMTP GMAIL
@@ -668,9 +684,9 @@ def enviar_correo(destino, asunto, html):
         print("================================")
 
         servidor = smtplib.SMTP(
-        "smtp.gmail.com",
-        587,
-        timeout=10
+            "smtp.gmail.com",
+            587,
+            timeout=20
         )
 
         servidor.starttls()
@@ -679,6 +695,7 @@ def enviar_correo(destino, asunto, html):
             EMAIL,
             PASSWORD
         )
+
         print("LOGIN GMAIL OK")
 
         servidor.sendmail(
@@ -691,9 +708,13 @@ def enviar_correo(destino, asunto, html):
 
         print("CORREO ENVIADO")
 
+        return True
+
     except Exception as e:
 
-        print("ERROR CORREO:", e)
+        print("ERROR CORREO:", str(e))
+
+        return False
     # =========================
 # HTML REUNIÓN
 # =========================
